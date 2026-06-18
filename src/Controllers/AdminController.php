@@ -19,7 +19,7 @@ class AdminController
     /** GET: lista wszystkich użytkowników z akcjami. */
     public function users(): void
     {
-        view('admin/users', ['users' => User::all()]);
+        view('admin/users', ['users' => User::all(), 'myId' => (int) Auth::user()['id']]);
     }
 
     /** POST: zmiana roli użytkownika (admin <-> user). */
@@ -28,8 +28,16 @@ class AdminController
         csrf_check();
         $id   = (int) ($_POST['id'] ?? 0);
         $role = $_POST['role'] === 'admin' ? 'admin' : 'user';
-        User::setRole($id, $role);
-        flash('Zmieniono rolę użytkownika.');
+        $me   = Auth::user();
+
+        // Administrator nie może odebrać uprawnień samemu sobie
+        // (inaczej mógłby przypadkiem zablokować sobie dostęp do panelu).
+        if ($id === (int) $me['id'] && $role !== 'admin') {
+            flash('Nie możesz odebrać uprawnień administratora samemu sobie.', 'error');
+        } else {
+            User::setRole($id, $role);
+            flash('Zmieniono rolę użytkownika.');
+        }
         redirect('index.php?page=admin_users');
     }
 

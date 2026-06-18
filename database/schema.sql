@@ -15,7 +15,6 @@ CREATE TABLE users (
     role               TEXT    NOT NULL DEFAULT 'user',      -- 'admin' lub 'user'
     is_verified        INTEGER NOT NULL DEFAULT 0,           -- 0 = niezweryfikowany, 1 = e-mail potwierdzony
     verification_token TEXT,                                 -- token z linka aktywacyjnego
-    auth_provider      TEXT    NOT NULL DEFAULT 'local',     -- 'local' / 'google' / 'facebook'
     theme              TEXT    NOT NULL DEFAULT 'light',     -- preferencja: 'light' / 'dark'
     is_online          INTEGER NOT NULL DEFAULT 0,           -- status online
     created_at         TEXT    NOT NULL DEFAULT (datetime('now'))

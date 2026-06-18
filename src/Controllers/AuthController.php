@@ -85,30 +85,6 @@ class AuthController
         redirect('index.php?page=login');
     }
 
-    /**
-     * GET: logowanie przez konto zewnętrzne (Google / Facebook).
-     * Dostawca potwierdza tożsamość użytkownika i zwraca jego dane (e-mail, nazwę).
-     * Na ich podstawie logujemy istniejące konto lub zakładamy nowe.
-     */
-    public function social(): void
-    {
-        $provider = $_GET['provider'] ?? '';
-        if (!in_array($provider, ['google', 'facebook'], true)) {
-            show_error(404, 'Nieznany dostawca logowania.');
-        }
-
-        // Dane konta otrzymane od dostawcy logowania.
-        $email = "uzytkownik.$provider@chat.pl";
-        $name  = 'Użytkownik ' . ucfirst($provider);
-
-        $user = User::findByEmail($email);
-        $id   = $user ? (int) $user['id'] : User::create($email, bin2hex(random_bytes(8)), $name, $provider);
-
-        Auth::login($id);
-        flash('Zalogowano przez ' . ucfirst($provider) . '.');
-        redirect('index.php?page=messages');
-    }
-
     /** Wylogowanie. */
     public function logout(): void
     {

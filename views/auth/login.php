@@ -17,12 +17,5 @@
         <button class="btn btn-primary" type="submit">Zaloguj się</button>
     </form>
 
-    <div class="divider">lub</div>
-
-    <div class="social">
-        <a class="btn btn-google"   href="index.php?page=social&provider=google">Zaloguj przez Google</a>
-        <a class="btn btn-facebook" href="index.php?page=social&provider=facebook">Zaloguj przez Facebook</a>
-    </div>
-
     <p class="muted">Nie masz konta? <a href="index.php?page=register">Zarejestruj się</a></p>
 </div>

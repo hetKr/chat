@@ -37,6 +37,15 @@ define('MAIL', [
 ]);
 
 // --- 2. Autoloader ------------------------------------------------------
+// Autoloader Composera — ładuje biblioteki zewnętrzne z katalogu vendor/
+// (m.in. PHPMailer używany przez klasę Mailer). Plik powstaje po wykonaniu
+// `composer install`. Sprawdzamy jego istnienie, by aplikacja działała
+// nawet zanim ktoś zainstaluje zależności.
+$composerAutoload = BASE_PATH . '/vendor/autoload.php';
+if (is_file($composerAutoload)) {
+    require $composerAutoload;
+}
+
 // Gdy w kodzie użyjemy klasy (np. new Message()), PHP samo doczyta plik
 // o tej samej nazwie z jednego z poniższych katalogów.
 spl_autoload_register(function (string $class): void {

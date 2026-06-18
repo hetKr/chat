@@ -10,23 +10,19 @@ class User
     /**
      * Tworzy nowego użytkownika. Zwraca jego ID.
      * Hasło hashujemy algorytmem bcrypt przez password_hash().
+     * Konto powstaje jako niezweryfikowane (is_verified = 0) z tokenem
+     * aktywacyjnym — wymaga potwierdzenia adresu e-mail przed logowaniem.
      */
-    public static function create(string $email, string $password, string $name, string $provider = 'local'): int
+    public static function create(string $email, string $password, string $name): int
     {
-        // Konta założone przez "konto społecznościowe" są od razu zweryfikowane.
-        $isVerified = $provider === 'local' ? 0 : 1;
-        $token      = $provider === 'local' ? bin2hex(random_bytes(16)) : null;
-
         Database::run(
-            'INSERT INTO users (email, password_hash, display_name, auth_provider, is_verified, verification_token)
-             VALUES (:email, :hash, :name, :provider, :verified, :token)',
+            'INSERT INTO users (email, password_hash, display_name, is_verified, verification_token)
+             VALUES (:email, :hash, :name, 0, :token)',
             [
-                ':email'    => $email,
-                ':hash'     => password_hash($password, PASSWORD_BCRYPT),
-                ':name'     => $name,
-                ':provider' => $provider,
-                ':verified' => $isVerified,
-                ':token'    => $token,
+                ':email' => $email,
+                ':hash'  => password_hash($password, PASSWORD_BCRYPT),
+                ':name'  => $name,
+                ':token' => bin2hex(random_bytes(16)),
             ]
         );
         return (int) Database::pdo()->lastInsertId();

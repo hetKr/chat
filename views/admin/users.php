@@ -15,15 +15,17 @@
             <td><?= $u['is_verified'] ? '✔ zweryfikowany' : '✖ niezweryfikowany' ?></td>
             <td><?= e($u['created_at']) ?></td>
             <td class="actions">
-                <!-- Zmiana roli -->
-                <form method="post" action="index.php?page=admin_set_role" class="inline">
-                    <?= csrf_field() ?>
-                    <input type="hidden" name="id" value="<?= (int) $u['id'] ?>">
-                    <input type="hidden" name="role" value="<?= $u['role'] === 'admin' ? 'user' : 'admin' ?>">
-                    <button class="btn-sm" type="submit">
-                        <?= $u['role'] === 'admin' ? 'Odbierz admina' : 'Nadaj admina' ?>
-                    </button>
-                </form>
+                <?php if ((int) $u['id'] !== $myId): ?>
+                    <!-- Zmiana roli (niedostępna dla własnego konta) -->
+                    <form method="post" action="index.php?page=admin_set_role" class="inline">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="id" value="<?= (int) $u['id'] ?>">
+                        <input type="hidden" name="role" value="<?= $u['role'] === 'admin' ? 'user' : 'admin' ?>">
+                        <button class="btn-sm" type="submit">
+                            <?= $u['role'] === 'admin' ? 'Odbierz admina' : 'Nadaj admina' ?>
+                        </button>
+                    </form>
+                <?php endif; ?>
                 <!-- Usunięcie -->
                 <form method="post" action="index.php?page=admin_delete" class="inline"
                       onsubmit="return confirm('Usunąć użytkownika?');">

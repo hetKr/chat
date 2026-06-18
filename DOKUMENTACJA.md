@@ -213,7 +213,7 @@ Każda tabela ma kolumnę `created_at` z **automatyczną datą utworzenia**
 | **Wiadomości tekst/obraz/film/plik/link** | `Message::TYPES`, formularz + upload w `MessageController::handleUpload()` |
 | **Rozmowy indywidualne i grupowe** | `ConversationController` + `Conversation` (tworzenie, dodawanie uczestników) |
 | **Zarządzanie użytkownikami i kontaktami** | `AdminController` (użytkownicy), `ContactController` (kontakty) |
-| **Logowanie e-mail + zewnętrzne** | `AuthController::doLogin()` oraz `AuthController::social()` (Google/Facebook) |
+| **Logowanie e-mail + hasło** | `AuthController::doLogin()` → `Auth::attempt()` |
 | **Rejestracja + weryfikacja e-mail** | `AuthController::doRegister()` → `Mailer::sendVerification()` → token → `verify()` |
 | **Baza relacyjna przez PDO** | `Database` (PDO), `schema.sql` |
 | **Min. 3 tabele + klucze obce + M:N** | 5 tabel; `conversation_user` to tabela łącząca M:N |
@@ -304,14 +304,9 @@ zapis + przekierowanie (PRG), żeby odświeżenie nie wysłało danych ponownie.
 
 **Jak działa weryfikacja e-maila?**
 Przy rejestracji generujemy losowy token i zapisujemy konto jako niezweryfikowane.
-`Mailer` wysyła e-mail z linkiem aktywacyjnym (funkcja `mail()`), a kopię zapisuje
-w `data/mail_outbox.log`. Kliknięcie linka z tokenem ustawia `is_verified = 1`.
-Bez tego logowanie jest blokowane.
-
-**Jak działa logowanie zewnętrzne (Google/Facebook)?**
-Dostawca potwierdza tożsamość i zwraca dane konta (e-mail, nazwę). Na ich podstawie
-logujemy istniejące konto lub zakładamy nowe z `auth_provider` ustawionym na dostawcę.
-Takie konto jest od razu zweryfikowane (tożsamość potwierdza dostawca).
+`Mailer` wysyła e-mail z linkiem aktywacyjnym przez SMTP (biblioteka PHPMailer),
+a kopię zapisuje w `data/mail_outbox.log`. Kliknięcie linka z tokenem ustawia
+`is_verified = 1`. Bez tego logowanie jest blokowane.
 
 **Czym różnią się role?**
 `user` widzi tylko swoje rozmowy i wiadomości. `admin` ma dostęp do panelu, widzi

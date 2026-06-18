@@ -27,7 +27,6 @@ $routes = [
     'register'     => [AuthController::class,    'register',  'guest'],
     'do_register'  => [AuthController::class,    'doRegister','guest'],
     'verify'       => [AuthController::class,    'verify',    'guest'],
-    'social'       => [AuthController::class,    'social',    'guest'],
     'logout'       => [AuthController::class,    'logout',    'auth'],
 
     // --- Wiadomości (główny zasób, pełny CRUD) ---
