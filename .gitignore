@@ -1,0 +1,10 @@
+# Zależności Composera — odtwarzane przez `composer install`
+/vendor/
+
+# Dane runtime — odtwarzane przez `php setup.php`, nie wersjonujemy
+/data/chat.sqlite
+/data/mail_outbox.log
+
+# Wgrane pliki użytkowników (zostawiamy sam katalog)
+/uploads/*
+!/uploads/.gitkeep

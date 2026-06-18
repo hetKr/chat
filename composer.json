@@ -1,0 +1,9 @@
+{
+    "name": "student/chat",
+    "description": "Aplikacja chatowa — projekt zaliczeniowy PHP",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
