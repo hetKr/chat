@@ -1,0 +1,181 @@
+/* =========================================================
+   STYLE APLIKACJI CHATOWEJ
+   Motyw sterowany atrybutem <html data-theme="light|dark">.
+   Kolory trzymamy w zmiennych CSS, więc zmiana motywu = zmiana zmiennych.
+   ========================================================= */
+
+:root,
+[data-theme="light"] {
+    --bg:        #f4f6fb;
+    --surface:   #ffffff;
+    --text:      #1f2430;
+    --muted:     #6b7280;
+    --border:    #e2e6ef;
+    --primary:   #4f46e5;
+    --primary-d: #4338ca;
+    --danger:    #dc2626;
+    --accent:    #10b981;
+    --shadow:    0 2px 10px rgba(20, 30, 60, .08);
+}
+
+[data-theme="dark"] {
+    --bg:        #161a23;
+    --surface:   #1f2530;
+    --text:      #e8eaf0;
+    --muted:     #9aa3b2;
+    --border:    #2c3442;
+    --primary:   #6366f1;
+    --primary-d: #818cf8;
+    --danger:    #ef4444;
+    --accent:    #34d399;
+    --shadow:    0 2px 12px rgba(0, 0, 0, .35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* --- Górny pasek --- */
+.topbar {
+    display: flex; align-items: center; gap: 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: .8rem 1.5rem;
+    box-shadow: var(--shadow);
+}
+.brand { font-size: 1.25rem; font-weight: 700; color: var(--text); }
+.nav { display: flex; gap: 1rem; }
+.nav a { color: var(--muted); font-weight: 500; }
+.nav a:hover { color: var(--primary); }
+.user-box { margin-left: auto; display: flex; align-items: center; gap: .8rem; }
+.online-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); display: inline-block; }
+
+/* --- Układ strony --- */
+.container { max-width: 1000px; margin: 1.5rem auto; padding: 0 1rem; }
+.footer { text-align: center; color: var(--muted); padding: 2rem 0; font-size: .85rem; }
+
+.page-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.head-actions { display: flex; gap: .5rem; }
+h1 { font-size: 1.6rem; margin: .2rem 0; }
+h2 { font-size: 1.2rem; margin: 1.2rem 0 .6rem; }
+
+/* --- Karty / kontenery --- */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.2rem;
+}
+.card-narrow { max-width: 420px; margin: 3rem auto; }
+
+/* --- Formularze --- */
+label { display: block; margin: .7rem 0 .2rem; font-weight: 500; }
+input, select, textarea {
+    width: 100%;
+    padding: .55rem .7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: .95rem;
+}
+input[type="checkbox"], input[type="radio"] { width: auto; }
+textarea { resize: vertical; }
+fieldset { border: 1px solid var(--border); border-radius: 8px; margin: .7rem 0; padding: .6rem .9rem; }
+legend { font-weight: 500; padding: 0 .4rem; }
+.radio, .check { display: inline-flex; align-items: center; gap: .35rem; font-weight: 400; margin-right: 1rem; }
+.form-actions { margin-top: 1.2rem; display: flex; gap: .6rem; }
+.error { color: var(--danger); font-size: .85rem; display: block; margin-top: .15rem; }
+.muted { color: var(--muted); font-size: .9rem; }
+
+/* --- Typ wiadomości: pola zależne od typu (czysty CSS, bez JS) --- */
+.type-fields { margin: .8rem 0; }
+.field-label { font-weight: 500; margin: .7rem 0 .4rem; }
+
+/* Ukrywamy prawdziwy przycisk radio, klikamy w stylizowaną etykietę (chip). */
+.type-radio { position: absolute; opacity: 0; width: 0; height: 0; }
+.type-chip {
+    display: inline-block; cursor: pointer;
+    padding: .4rem .9rem; margin: 0 .35rem .5rem 0;
+    border: 1px solid var(--border); border-radius: 20px;
+    font-size: .9rem; background: var(--surface); color: var(--text);
+}
+/* Zaznaczony typ podświetlamy (etykieta tuż po zaznaczonym input-cie). */
+.type-radio:checked + .type-chip { background: var(--primary); color: #fff; border-color: var(--primary); }
+.type-radio:focus-visible + .type-chip { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* Domyślnie pola zależne są ukryte; pokazujemy tylko pasujące do typu. */
+.field { display: none; }
+#type-tekst:checked ~ .field-body { display: block; }
+#type-link:checked  ~ .field-link { display: block; }
+#type-obraz:checked ~ .field-file,
+#type-film:checked  ~ .field-file,
+#type-plik:checked  ~ .field-file { display: block; }
+
+/* --- Przyciski --- */
+.btn {
+    display: inline-block; cursor: pointer;
+    padding: .55rem 1rem; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    font-size: .9rem; font-weight: 500; text-align: center;
+}
+.btn:hover { text-decoration: none; border-color: var(--primary); }
+.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+.btn-primary:hover { background: var(--primary-d); }
+.btn-ghost { background: transparent; }
+.btn-google   { background: #ea4335; color: #fff; border: none; }
+.btn-facebook { background: #1877f2; color: #fff; border: none; }
+.btn-link { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1rem; }
+.btn-sm { padding: .3rem .6rem; font-size: .8rem; border-radius: 6px; border: 1px solid var(--border);
+          background: var(--surface); color: var(--text); cursor: pointer; }
+.btn-danger { color: #fff; background: var(--danger); border-color: var(--danger); }
+.inline { display: inline; }
+
+/* --- Tabela --- */
+.table { width: 100%; border-collapse: collapse; background: var(--surface);
+         border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+.table th, .table td { padding: .7rem .8rem; text-align: left; border-bottom: 1px solid var(--border); font-size: .9rem; }
+.table th { background: var(--bg); font-weight: 600; }
+.table th a { color: var(--text); }
+.table tr:last-child td { border-bottom: none; }
+.actions { display: flex; gap: .4rem; align-items: center; }
+.empty { text-align: center; color: var(--muted); padding: 1.5rem; }
+.badge { background: var(--primary); color: #fff; padding: .15rem .5rem; border-radius: 20px; font-size: .75rem; }
+
+/* --- Filtry i eksport --- */
+.filters { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-bottom: 1rem; }
+.filters input[type="text"], .filters select { width: auto; flex: 0 0 auto; }
+.filters input[type="text"] { min-width: 220px; }
+.export-bar { margin-bottom: 1rem; color: var(--muted); font-size: .9rem; }
+
+/* --- Podsumowanie (statystyki) --- */
+.summary { display: flex; flex-wrap: wrap; gap: .8rem; margin-bottom: 1.2rem; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+        padding: .7rem 1rem; box-shadow: var(--shadow); font-size: .9rem; color: var(--muted); }
+.stat-num { font-size: 1.3rem; font-weight: 700; color: var(--primary); display: block; }
+
+/* --- Paginacja --- */
+.pagination { display: flex; gap: .4rem; margin-top: 1rem; }
+.page-link { padding: .4rem .7rem; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.page-link.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* --- Komunikaty flash --- */
+.flash { padding: .8rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: .9rem; }
+.flash-success { background: #dcfce7; color: #166534; }
+.flash-error   { background: #fee2e2; color: #991b1b; }
+
+/* --- Pozostałe --- */
+.divider { text-align: center; color: var(--muted); margin: 1rem 0; }
+.social { display: flex; flex-direction: column; gap: .5rem; }
+.error-page h1 { font-size: 3rem; color: var(--primary); }

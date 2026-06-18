@@ -1,0 +1,8 @@
+[2026-06-17 15:33:21] [WYSŁANO] Do: steam@wp.pl
+Temat: Potwierdź swoje konto w komunikatorze
+Witaj!
+
+Kliknij poniższy link, aby aktywować konto:
+http://localhost:8000/index.php?page=verify&token=205fb387cd0f8948411f89862580367e
+
+----------
