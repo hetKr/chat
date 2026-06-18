@@ -1,5 +1,5 @@
 {
-    "name": "student/chat",
+    "name": "php/chat",
     "description": "Aplikacja chatowa — projekt zaliczeniowy PHP",
     "type": "project",
     "require": {

@@ -4,9 +4,13 @@
  * Zmienne: $result, $summary, $filters, $conversations, $types.
  */
 
-// Pomocnik: buduje adres URL zachowując aktualne filtry, nadpisując wybrane.
-$buildUrl = function (array $override) use ($filters): string {
-    $params = array_merge([
+/**
+ * Buduje adres listy wiadomości zachowując aktualne filtry.
+ * $override pozwala nadpisać wybrane parametry (np. numer strony albo sortowanie).
+ */
+function messages_url(array $filters, array $override = []): string
+{
+    $params = [
         'page'            => 'messages',
         'search'          => $filters['search'],
         'type'            => $filters['type'],
@@ -14,21 +18,20 @@ $buildUrl = function (array $override) use ($filters): string {
         'important'       => $filters['important'],
         'sort'            => $filters['sort'],
         'dir'             => $filters['dir'],
-        'p'               => $filters['page'],
-    ], $override);
-    // Klucz strony paginacji w URL to 'page' rozmowy? Uwaga: 'page' to router.
-    return 'index.php?' . http_build_query($params);
-};
+        'p'               => $filters['page'],   // 'p' = numer strony (parametr 'page' to router)
+    ];
+    return 'index.php?' . http_build_query(array_merge($params, $override));
+}
 
-// Nagłówek kolumny z możliwością sortowania.
-$sortLink = function (string $column, string $label) use ($filters, $buildUrl): string {
+/** Zwraca nagłówek kolumny jako odnośnik zmieniający sortowanie (ze strzałką kierunku). */
+function sort_header(array $filters, string $column, string $label): string
+{
     $isActive = $filters['sort'] === $column;
     $nextDir  = ($isActive && $filters['dir'] === 'asc') ? 'desc' : 'asc';
     $arrow    = $isActive ? ($filters['dir'] === 'asc' ? ' ▲' : ' ▼') : '';
-    $url = $buildUrl(['sort' => $column, 'dir' => $nextDir, 'page' => 'messages']);
-    // Uwaga: paginacja używa parametru ?page liczbowego — patrz niżej w linkach stron.
+    $url = messages_url($filters, ['sort' => $column, 'dir' => $nextDir]);
     return '<a href="' . e($url) . '">' . e($label) . $arrow . '</a>';
-};
+}
 ?>
 
 <div class="page-head">
@@ -82,21 +85,21 @@ $sortLink = function (string $column, string $label) use ($filters, $buildUrl): 
 <!-- PRZYCISKI EKSPORTU -->
 <div class="export-bar">
     Eksport widocznych danych:
-    <a class="btn btn-ghost" href="<?= e($buildUrl(['page' => 'export', 'format' => 'csv'])) ?>">CSV</a>
-    <a class="btn btn-ghost" href="<?= e($buildUrl(['page' => 'export', 'format' => 'json'])) ?>">JSON</a>
+    <a class="btn btn-ghost" href="<?= e(messages_url($filters, ['page' => 'export', 'format' => 'csv'])) ?>">CSV</a>
+    <a class="btn btn-ghost" href="<?= e(messages_url($filters, ['page' => 'export', 'format' => 'json'])) ?>">JSON</a>
 </div>
 
 <!-- TABELA REKORDÓW -->
 <table class="table">
     <thead>
         <tr>
-            <th><?= $sortLink('type', 'Typ') ?></th>
+            <th><?= sort_header($filters, 'type', 'Typ') ?></th>
             <th>Rozmowa</th>
             <th>Nadawca</th>
             <th>Treść</th>
-            <th><?= $sortLink('priority', 'Priorytet') ?></th>
-            <th><?= $sortLink('is_important', 'Ważna') ?></th>
-            <th><?= $sortLink('created_at', 'Data') ?></th>
+            <th><?= sort_header($filters, 'priority', 'Priorytet') ?></th>
+            <th><?= sort_header($filters, 'is_important', 'Ważna') ?></th>
+            <th><?= sort_header($filters, 'created_at', 'Data') ?></th>
             <th>Akcje</th>
         </tr>
     </thead>
@@ -140,18 +143,8 @@ $sortLink = function (string $column, string $label) use ($filters, $buildUrl): 
 <?php if ($result['pages'] > 1): ?>
     <div class="pagination">
         <?php for ($p = 1; $p <= $result['pages']; $p++): ?>
-            <?php
-            $url = 'index.php?' . http_build_query([
-                'page'            => 'messages',
-                'search'          => $filters['search'],
-                'type'            => $filters['type'],
-                'conversation_id' => $filters['conversation_id'],
-                'important'       => $filters['important'],
-                'sort'            => $filters['sort'],
-                'dir'             => $filters['dir'],
-            ]) . '&p=' . $p;
-            ?>
-            <a class="page-link <?= $result['page'] === $p ? 'active' : '' ?>" href="<?= e($url) ?>"><?= $p ?></a>
+            <a class="page-link <?= $result['page'] === $p ? 'active' : '' ?>"
+               href="<?= e(messages_url($filters, ['p' => $p])) ?>"><?= $p ?></a>
         <?php endfor; ?>
     </div>
 <?php endif; ?>

@@ -73,7 +73,7 @@ function e(?string $value): string
 }
 
 /** Przekierowanie i natychmiastowe zakończenie skryptu (wzorzec PRG). */
-function redirect(string $url): never
+function redirect(string $url): void
 {
     header('Location: ' . $url, true, 303);
     exit;
@@ -107,7 +107,7 @@ function view(string $template, array $data = []): void
 }
 
 /** Wyświetlenie strony błędu i zakończenie (np. 404, 403, 500). */
-function show_error(int $code, string $message): never
+function show_error(int $code, string $message): void
 {
     http_response_code($code);
     view('errors/error', ['code' => $code, 'message' => $message]);

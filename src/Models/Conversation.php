@@ -47,6 +47,12 @@ class Conversation
             'SELECT conversation_id FROM conversation_user WHERE user_id = :u',
             [':u' => $userId]
         )->fetchAll();
-        return array_map(static fn($r) => (int) $r['conversation_id'], $rows);
+
+        // Z każdego wiersza wyciągamy samo ID rozmowy do prostej tablicy.
+        $ids = [];
+        foreach ($rows as $row) {
+            $ids[] = (int) $row['conversation_id'];
+        }
+        return $ids;
     }
 }

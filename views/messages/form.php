@@ -7,7 +7,6 @@
  * w zależności od zaznaczonego typu — realizuje to czysty CSS (selektor
  * ":checked ~"), dlatego radia i te pola są rodzeństwem w <div class="type-fields">.
  */
-$val = fn(string $key, $default = '') => e((string) ($message[$key] ?? $default));
 $isEdit = $id !== null;
 $type   = $message['type'] ?? 'tekst';
 ?>
@@ -55,7 +54,7 @@ $type   = $message['type'] ?? 'tekst';
             <!-- tekst -> treść -->
             <div class="field field-body">
                 <label>Treść wiadomości
-                    <textarea name="body" rows="4" placeholder="Wpisz treść (możesz użyć emotikonów 😀)"><?= $val('body') ?></textarea>
+                    <textarea name="body" rows="4" placeholder="Wpisz treść (możesz użyć emotikonów 😀)"><?= e((string) ($message['body'] ?? '')) ?></textarea>
                 </label>
                 <?php if (!empty($errors['body'])): ?><span class="error"><?= e($errors['body']) ?></span><?php endif; ?>
             </div>
@@ -63,7 +62,7 @@ $type   = $message['type'] ?? 'tekst';
             <!-- link -> adres URL -->
             <div class="field field-link">
                 <label>Adres URL
-                    <input type="text" name="link_url" value="<?= $val('link_url') ?>" placeholder="https://...">
+                    <input type="text" name="link_url" value="<?= e((string) ($message['link_url'] ?? '')) ?>" placeholder="https://...">
                 </label>
                 <?php if (!empty($errors['link_url'])): ?><span class="error"><?= e($errors['link_url']) ?></span><?php endif; ?>
             </div>
@@ -83,7 +82,7 @@ $type   = $message['type'] ?? 'tekst';
 
         <!-- POLE: liczbowe — priorytet (zawsze widoczne) -->
         <label>Priorytet (1–5)
-            <input type="number" name="priority" min="1" max="5" value="<?= $val('priority', '1') ?>">
+            <input type="number" name="priority" min="1" max="5" value="<?= e((string) ($message['priority'] ?? '1')) ?>">
         </label>
         <?php if (!empty($errors['priority'])): ?><span class="error"><?= e($errors['priority']) ?></span><?php endif; ?>
 

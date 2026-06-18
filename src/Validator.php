@@ -75,7 +75,9 @@ class Validator
     public function addError(string $field, string $message): self
     {
         // Zapamiętujemy tylko pierwszy błąd dla danego pola.
-        $this->errors[$field] ??= $message;
+        if (!isset($this->errors[$field])) {
+            $this->errors[$field] = $message;
+        }
         return $this;
     }
 
